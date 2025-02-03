@@ -29,7 +29,13 @@
                         <th>Emojis</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    <tr>
+                        {% for item in new_doc %}
+                            <li><a href="{{ item.href }}">{{ item.name }}</a></li>
+                        {% endfor %}
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>
