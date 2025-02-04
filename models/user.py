@@ -3,6 +3,8 @@ from datetime import date, datetime, time, timedelta
 
 class User(BaseModel):
     name: str
-    time_taken: float 
-    emojis_used: int
-    # timestamp: datetime = datetime.utcnow()
+    emojis_used: int = None
+    assigned_movie: str
+    start_time: datetime = None
+    end_time: datetime = None
+    time_taken: float = None

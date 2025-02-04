@@ -1,13 +1,15 @@
+import datetime
+from bson import ObjectId
 from fastapi import APIRouter, HTTPException
 from config.db import get_database
 import random
 from typing import List
 
 router = APIRouter()
-db = get_database()
-
+db = get_database().sample_mflix
+db1 = get_database()
 # print(list(db.movies.find().limit(1)))
-
+# print("users:", db1.scores.scores.find({}))
 # movie_count = db.movies.count_documents({})
 # print(f"Total movies: {movie_count}")
 
@@ -41,3 +43,47 @@ async def get_random_movie():
             }}
         ]))
     return random_movie
+
+ 
+@router.post("/create-user")
+async def create_user(username: str):
+    random_movie = await get_random_movie()
+    user_data = {
+        "name": username,
+        "assigned_movie": random_movie,
+        "start_time": datetime.datetime.now()
+    }
+
+    result = db1.scores.scores.insert_one(user_data)
+    return {
+        "user_id": str(result.inserted_id),
+        "name": username,
+        "assigned_movie": random_movie,
+        "start_time": user_data["start_time"]
+    }
+
+@router.put("/end-game/{user_id}")
+async def end_game(user_id: str):
+    end_time = datetime.datetime.now()
+    user = db1.scores.scores.find_one({"_id": ObjectId(user_id)})
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    time_taken = (end_time - user["start_time"]).total_seconds()
+    
+    db1.scores.scores.update_one(
+        {"_id": ObjectId(user_id)},
+        {
+            "$set": {
+                "end_time": end_time,
+                "time_taken": time_taken
+            }
+        }
+    )
+    
+    return {
+        "name": user["name"],
+        "time_taken": time_taken
+    }
+        

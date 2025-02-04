@@ -15,7 +15,7 @@ def get_database():
     try:
         client.admin.command('ping')
         print("Pinged your deployment. You successfully connected to MongoDB!")
-        return client.sample_mflix
+        return client
     except Exception as e:
         print(e)
         return None
