@@ -1,6 +1,7 @@
 import datetime
 from bson import ObjectId
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 from config.db import get_database
 import random
 from typing import List
@@ -86,4 +87,54 @@ async def end_game(user_id: str):
         "name": user["name"],
         "time_taken": time_taken
     }
+
+# @router.post("/predict-movie")
+# async def predict_movie(emojis: str):
+#         # This endpoint just receives emojis and returns prediction
+#         predicted_movie = "Model_Prediction"  # Replace with actual model call
         
+#         return JSONResponse(
+#             content={
+#                 "status": "success",
+#                 "predicted_movie": predicted_movie,
+#                 "confidence": 0.85  # Example confidence score
+#             }
+#         )
+
+# router.post("/verify-guess/{user_id}")
+# async def verify_guess(user_id: str, predicted_movie: str):
+#     user = db1.scores.scores.find_one({"_id": ObjectId(user_id)})
+#     if not user:
+#         return JSONResponse(
+#             status_code=404,
+#             content={"status": "error", "message": "User not found"}
+#         )
+  
+#     is_correct = predicted_movie == user["assigned_movie"]["title"]
+    
+#     return JSONResponse(
+#         content={
+#             "status": "success",
+#             "correct": is_correct,
+#             "actual_movie": user["assigned_movie"]["title"] if is_correct else None
+#         }
+#     )
+
+    
+# router.get("/leaderboard")
+# async def get_leaderboard(limit: int = 10):
+#     leaderboard = list(db1.scores.scores.find(
+#         {"time_taken": {"$exists": True}},
+#         # {"name": 1, "time_taken": 1, "emoji_attempts": 1, "_id": 0}
+#         {"name": 1, "time_taken": 1, "_id": 0}
+#     ).sort("time_taken", 1).limit(limit))
+    
+#     return JSONResponse(
+#         content={
+#             "status": "success",
+#             "data": leaderboard
+#         }
+#     )
+
+for user in db1.scores.scores.find({}).sort("time_taken"):
+    print(user, "\n")
