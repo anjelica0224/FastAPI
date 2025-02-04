@@ -27,5 +27,6 @@ async def read_item(request: Request):
         request=request, name="index.html", context={"new_doc": new_doc}
     )
 
+
 # @router.post("/submit-score", response_class = HTMLResponse)
 
