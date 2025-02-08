@@ -1,3 +1,4 @@
+import csv
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
@@ -20,7 +21,13 @@ def get_database():
         print(e)
         return None
     
-    
-
+def movie_list():
+    list = os.getenv("file_path")
+    with open(list, 'r', encoding='utf-8') as file:
+            csvReader = csv.DictReader(file)
+            titles = []
+            for row in csvReader:
+                titles.append(row['Title'])  
+    return titles
 
 
